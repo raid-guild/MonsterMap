@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Formik, Form } from 'formik';
-import { useInjectedProvider } from '../../../contexts/injectedProviderContext';
+// import { useInjectedProvider } from '../../../contexts/injectedProviderContext';
 import { useCurrentUser } from '../../../contexts/currentUserContext';
 import { useContract } from '../../../contexts/contractContext';
 import { ValidAmount } from '../../../utils/validation';
@@ -13,15 +13,11 @@ import {
   NumberInputStepper,
   NumberIncrementStepper,
   NumberDecrementStepper,
-  HStack,
-  Spacer,
-  FormLabel,
   Container,
   InputGroup,
-  InputRightAddon,
 } from '@chakra-ui/react';
-import { User } from '../../../types';
-import { TokenInfo } from '../TokenInfo';
+// import { User } from '../../../types';
+// import { TokenInfo } from '../TokenInfo';
 
 export interface MonsterFormProps {
   /**

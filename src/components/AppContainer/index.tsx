@@ -11,8 +11,7 @@ import footerImage from '../../assets/raidguild_mark.png';
 import raidGuildLogoLeft from '../../assets/raid--left.png';
 import raidGuildLogoRight from '../../assets/raid--right.png';
 import { AccountButton } from '../molecules/AccountButton';
-import logo from '../../assets/wrapeth_logo.png';
-import { useCurrentUser } from '../../contexts/currentUserContext';
+// import { useCurrentUser } from '../../contexts/currentUserContext';
 import { MonsterForm } from '../molecules/MonsterForm';
 
 export interface AppContainerProps {
@@ -26,7 +25,7 @@ export interface AppContainerProps {
  * Primary UI component for user interaction
  */
 export const AppContainer: React.FC<AppContainerProps> = ({ children }) => {
-  const { currentUser } = useCurrentUser();
+  // const { currentUser } = useCurrentUser();
 
   return (
     <Flex h='100vh' w='100vw'>
@@ -36,7 +35,7 @@ export const AppContainer: React.FC<AppContainerProps> = ({ children }) => {
 
       <Container centerContent flexDirection='column' width='100%'>
         <Header>
-          <Text fontSize='6xl'>Monsters and Encounters</Text>
+          <Text fontSize='6xl'>Monsters & Encounters</Text>
           <Spacer />
           <AccountButton />
         </Header>
