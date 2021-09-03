@@ -13,6 +13,7 @@ import raidGuildLogoRight from '../../assets/raid--right.png';
 import { AccountButton } from '../molecules/AccountButton';
 // import { useCurrentUser } from '../../contexts/currentUserContext';
 import { MonsterForm } from '../molecules/MonsterForm';
+import { EncounterForm } from '../molecules/EncounterForm';
 
 export interface AppContainerProps {
   /**
@@ -41,6 +42,9 @@ export const AppContainer: React.FC<AppContainerProps> = ({ children }) => {
         </Header>
         <Container centerContent marginTop='10px'>
           <MonsterForm />
+        </Container>
+        <Container centerContent marginTop='100px'>
+          <EncounterForm />
         </Container>
 
         <Spacer />
