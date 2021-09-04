@@ -36,15 +36,15 @@ export const AppContainer: React.FC<AppContainerProps> = ({ children }) => {
 
       <Container centerContent flexDirection='column' width='100%'>
         <Header>
-          <Text fontSize='6xl'>Monsters & Encounters</Text>
+          <Text fontSize='6xl'>Monsters & Maps</Text>
           <Spacer />
           <AccountButton />
         </Header>
-        <Container centerContent marginTop='10px'>
-          <MonsterForm />
-        </Container>
         <Container centerContent marginTop='100px'>
           <EncounterForm />
+        </Container>
+        <Container centerContent marginTop='100px'>
+          <MonsterForm />
         </Container>
 
         <Spacer />

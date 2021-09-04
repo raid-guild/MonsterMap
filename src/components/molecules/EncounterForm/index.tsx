@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Formik, Form } from 'formik';
 // import { useInjectedProvider } from '../../../contexts/injectedProviderContext';
 import { useCurrentUser } from '../../../contexts/currentUserContext';
-import { useContract } from '../../../contexts/contractContext';
+import { useMapContract } from '../../../contexts/mapContractContext';
 import { ValidAmount } from '../../../utils/validation';
 import { Button } from '@chakra-ui/button';
 import {
@@ -15,6 +15,8 @@ import {
   NumberDecrementStepper,
   Container,
   InputGroup,
+  Image,
+  Text,
 } from '@chakra-ui/react';
 // import { User } from '../../../types';
 // import { TokenInfo } from '../TokenInfo';
@@ -36,26 +38,30 @@ interface Values {
 export const EncounterForm: React.FC<EncounterFormProps> = () => {
   //const { injectedProvider } = useInjectedProvider();
   const { currentUser } = useCurrentUser();
-  const { contract } = useContract();
+  const { contract } = useMapContract();
+  const [uri, setUri] = useState();
 
   const onFormSubmit = async (values: Values) => {
-    // const weiValue = injectedProvider.utils.toWei('' + values.encounterId);
+    console.log(contract);
+
     if (currentUser && contract) {
       try {
-        // await contract.methods
-        //   .deposit()
-        //   .send({ value: weiValue, from: currentUser?.username });
-        console.log('getting encounter', values);
-        //TODO updating balances and typing
-        // const updatedUser: User = {
-        //   ...currentUser,
-        //   ...{
-        //     wethBalance: (+currentUser.wethBalance + +values.encounterId).toString(),
-        //     ethBalance: (+currentUser.ethBalance - +values.encounterId).toString(),
-        //   },
-        // };
+        const muri = await contract.methods.tokenURI(values.encounterId).call();
 
-        // setCurrentUser(updatedUser);
+        if (muri) {
+          const meta = atob(muri.split('base64,')[1]);
+          setUri(JSON.parse(meta).image);
+          return;
+        }
+      } catch {
+        setUri(undefined);
+        console.log('new map found');
+      }
+
+      try {
+        await contract.methods
+          .discoverEncounters(values.encounterId.toString())
+          .send({ from: currentUser?.username });
       } catch (e) {
         console.log('Error: ', e);
       }
@@ -135,6 +141,12 @@ export const EncounterForm: React.FC<EncounterFormProps> = () => {
           </Form>
         )}
       </Formik>
+      {uri && (
+        <Container>
+          <Text>Encounter Already Found. keep hunting</Text>
+          <Image src={uri} />
+        </Container>
+      )}
     </Container>
   );
 };

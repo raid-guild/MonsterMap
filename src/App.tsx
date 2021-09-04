@@ -7,6 +7,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { theme } from './theme';
 import { CurrentUserContextProvider } from './contexts/currentUserContext';
 import { ContractContextProvider } from './contexts/contractContext';
+import { MapContractContextProvider } from './contexts/mapContractContext';
 
 const App = () => {
   return (
@@ -15,7 +16,9 @@ const App = () => {
         <InjectedProvider>
           <CurrentUserContextProvider>
             <ContractContextProvider>
-              <AppContainer />
+              <MapContractContextProvider>
+                <AppContainer />
+              </MapContractContextProvider>
             </ContractContextProvider>
           </CurrentUserContextProvider>
         </InjectedProvider>

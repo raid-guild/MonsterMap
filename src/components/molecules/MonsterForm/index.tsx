@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Formik, Form } from 'formik';
 // import { useInjectedProvider } from '../../../contexts/injectedProviderContext';
@@ -15,6 +15,8 @@ import {
   NumberDecrementStepper,
   Container,
   InputGroup,
+  Image,
+  Text,
 } from '@chakra-ui/react';
 // import { User } from '../../../types';
 // import { TokenInfo } from '../TokenInfo';
@@ -34,28 +36,28 @@ interface Values {
  * Interface for depositing ETH and receiving wETH
  */
 export const MonsterForm: React.FC<MonsterFormProps> = () => {
-  //const { injectedProvider } = useInjectedProvider();
   const { currentUser } = useCurrentUser();
   const { contract } = useContract();
+  const [uri, setUri] = useState();
 
   const onFormSubmit = async (values: Values) => {
-    // const weiValue = injectedProvider.utils.toWei('' + values.monsterId);
     if (currentUser && contract) {
       try {
-        // await contract.methods
-        //   .deposit()
-        //   .send({ value: weiValue, from: currentUser?.username });
-        console.log('getting monster', values);
-        //TODO updating balances and typing
-        // const updatedUser: User = {
-        //   ...currentUser,
-        //   ...{
-        //     wethBalance: (+currentUser.wethBalance + +values.monsterId).toString(),
-        //     ethBalance: (+currentUser.ethBalance - +values.monsterId).toString(),
-        //   },
-        // };
+        const muri = await contract.methods.tokenURI(values.monsterId).call();
+        if (muri) {
+          const meta = atob(muri.split('base64,')[1]);
+          setUri(JSON.parse(meta).image);
+          return;
+        }
+      } catch {
+        setUri(undefined);
+        console.log('new monster found');
+      }
 
-        // setCurrentUser(updatedUser);
+      try {
+        await contract.methods
+          .claim(values.monsterId.toString())
+          .send({ from: currentUser?.username });
       } catch (e) {
         console.log('Error: ', e);
       }
@@ -132,6 +134,12 @@ export const MonsterForm: React.FC<MonsterFormProps> = () => {
           </Form>
         )}
       </Formik>
+      {uri && (
+        <Container>
+          <Text>Monster Already Found. keep hunting</Text>
+          <Image src={uri} />
+        </Container>
+      )}
     </Container>
   );
 };

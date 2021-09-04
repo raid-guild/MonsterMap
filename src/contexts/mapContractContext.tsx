@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useInjectedProvider } from './injectedProviderContext';
 import { Contract } from 'web3-eth-contract';
-import MonsterAbi from '../contracts/MonstersAbi.json';
+import MapsAbi from '../contracts/MapsAbi.json';
 
 type ContractContextType = {
   contract?: Contract;
@@ -9,7 +9,7 @@ type ContractContextType = {
   setContract: (contract: Contract) => void;
 };
 
-export const ContractContext = createContext<ContractContextType>({
+export const MapContractContext = createContext<ContractContextType>({
   contract: undefined,
   // eslint-disable-next-line no-unused-vars
   setContract: (contract: Contract) => {},
@@ -19,14 +19,14 @@ interface ContractProps {
   children: any;
 }
 
-const monsterAddrs: any = {
-  mainnet: '0xeCb9B2EA457740fBDe58c758E4C574834224413e',
+const mapAddrs: any = {
+  mainnet: '0x6C8715ade6361D35c941EB901408EFca8A20F65a',
   kovan: '',
   xdai: '',
   matic: '',
 };
 
-export const ContractContextProvider: React.FC<ContractProps> = ({
+export const MapContractContextProvider: React.FC<ContractProps> = ({
   children,
 }: ContractProps) => {
   const [contract, setContract] = useState<Contract>();
@@ -41,8 +41,8 @@ export const ContractContextProvider: React.FC<ContractProps> = ({
       console.log('network name', injectedChain.network);
       try {
         const contract: Contract = await new injectedProvider.eth.Contract(
-          MonsterAbi,
-          monsterAddrs[injectedChain.network],
+          MapsAbi,
+          mapAddrs[injectedChain.network],
         );
         console.log('Contract: ', contract);
         setContract(contract);
@@ -57,13 +57,13 @@ export const ContractContextProvider: React.FC<ContractProps> = ({
   }, [injectedChain, web3Modal.web3]);
 
   return (
-    <ContractContext.Provider value={{ contract, setContract }}>
+    <MapContractContext.Provider value={{ contract, setContract }}>
       {children}
-    </ContractContext.Provider>
+    </MapContractContext.Provider>
   );
 };
 
-export const useContract = () => {
-  const { contract, setContract } = useContext(ContractContext);
+export const useMapContract = () => {
+  const { contract, setContract } = useContext(MapContractContext);
   return { contract, setContract };
 };
